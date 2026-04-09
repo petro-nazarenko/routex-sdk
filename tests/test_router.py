@@ -5,16 +5,17 @@ Run: pytest tests/test_router.py -v
 """
 from __future__ import annotations
 
+import os
+import sys
+
 import pytest
-import sys, os
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from unittest.mock import AsyncMock, MagicMock
-from core.router    import RouteXRouter, NoProviderAvailableError
-from core.types     import (
-    ComputeProvider, JobRequest, JobStatus, ProviderQuote
-)
 
+from core.router import NoProviderAvailableError, RouteXRouter
+from core.types import ComputeProvider, JobRequest, JobStatus, ProviderQuote
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
 

@@ -5,7 +5,7 @@ import asyncio
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from core.types import ComputeProvider, JobRequest, JobResult, JobStatus, ProviderQuote
+from core.types import ComputeProvider, JobRequest, JobStatus, ProviderQuote
 
 
 class BaseProvider(ABC):
@@ -53,7 +53,7 @@ class BaseProvider(ABC):
         elapsed = 0.0
         while elapsed < timeout_s:
             status, output = await self.poll_status(job_id)
-            if status in (JobStatus.COMPLETED, JobStatus.FAILED):
+            if status in (JobStatus.COMPLETED, JobStatus.FAILED, JobStatus.TIMEOUT):
                 return status, output
             await asyncio.sleep(poll_interval_s)
             elapsed += poll_interval_s
