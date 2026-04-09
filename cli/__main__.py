@@ -17,13 +17,13 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from core.providers.akash   import AkashProvider
-from core.providers.aethir  import AethirProvider
-from core.providers.nosana  import NosanaProvider
-from core.providers.ionet   import IoNetProvider
-from core.router     import RouteXRouter
+from core.providers.aethir import AethirProvider
+from core.providers.akash import AkashProvider
+from core.providers.ionet import IoNetProvider
+from core.providers.nosana import NosanaProvider
+from core.router import RouteXRouter
 from core.settlement import OnChainSettlement
-from core.types      import JobRequest, ComputeProvider
+from core.types import ComputeProvider, JobRequest
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("cli")

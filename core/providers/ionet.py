@@ -6,8 +6,8 @@ from typing import Optional
 
 import aiohttp
 
-from core.types import ComputeProvider, JobRequest, JobStatus, ProviderQuote
 from core.providers.base import BaseProvider
+from core.types import ComputeProvider, JobRequest, JobStatus, ProviderQuote
 
 logger = logging.getLogger(__name__)
 

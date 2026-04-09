@@ -5,7 +5,7 @@ import asyncio
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from core.types import ComputeProvider, JobRequest, JobResult, JobStatus, ProviderQuote
+from core.types import ComputeProvider, JobRequest, JobStatus, ProviderQuote
 
 
 class BaseProvider(ABC):

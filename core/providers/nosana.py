@@ -6,8 +6,8 @@ from typing import Optional
 
 import aiohttp
 
-from core.types import ComputeProvider, JobRequest, JobStatus, ProviderQuote
 from core.providers.base import BaseProvider
+from core.types import ComputeProvider, JobRequest, JobStatus, ProviderQuote
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ class NosanaProvider(BaseProvider):
     def name(self) -> ComputeProvider:
         return ComputeProvider.NOSANA
 
-    async def _session_get(self) -> aiohttp.ClientSession:
+    async def _get_session(self) -> aiohttp.ClientSession:
         if not self._session or self._session.closed:
             self._session = aiohttp.ClientSession(
                 headers={"x-api-key": self._api_key}
@@ -38,7 +38,7 @@ class NosanaProvider(BaseProvider):
 
     async def quote(self, job: JobRequest) -> Optional[ProviderQuote]:
         try:
-            session = await self._session_get()
+            session = await self._get_session()
             async with session.get(
                 f"{NOSANA_API_BASE}/markets",
                 params={"min_vram": job.gpu_vram_gb},
@@ -71,7 +71,7 @@ class NosanaProvider(BaseProvider):
             return None
 
     async def submit(self, job: JobRequest, quote: ProviderQuote) -> str:
-        session = await self._session_get()
+        session = await self._get_session()
         async with session.post(
             f"{NOSANA_API_BASE}/jobs",
             json={"model": job.model, "input": job.input_data},
@@ -81,7 +81,7 @@ class NosanaProvider(BaseProvider):
             return (await resp.json())["job_id"]
 
     async def poll_status(self, job_id: str) -> tuple[JobStatus, Optional[dict]]:
-        session = await self._session_get()
+        session = await self._get_session()
         async with session.get(
             f"{NOSANA_API_BASE}/jobs/{job_id}",
             timeout=aiohttp.ClientTimeout(total=5),

@@ -16,13 +16,10 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
-from typing import Optional
 
 from core.providers.base import BaseProvider
 from core.settlement import OnChainSettlement
-from core.types import (
-    ComputeProvider, JobRequest, JobResult, JobStatus, ProviderQuote, RoutingDecision
-)
+from core.types import JobRequest, JobResult, JobStatus, ProviderQuote, RoutingDecision
 
 logger = logging.getLogger(__name__)
 
@@ -179,15 +176,21 @@ class RouteXRouter:
             )
         except asyncio.TimeoutError:
             logger.warning("Quote collection timed out after %.1fs", QUOTE_TIMEOUT_S)
-            results = [t.result() if not t.cancelled() and not t.exception() else None
-                       for t in tasks.values()]
+            results = []
+            for t in tasks.values():
+                if t.done() and not t.cancelled():
+                    try:
+                        results.append(t.result())
+                    except Exception:
+                        results.append(None)
+                else:
+                    t.cancel()
+                    results.append(None)
 
         quotes = []
         for result in results:
-            if isinstance(result, ProviderQuote) and result is not None:
+            if isinstance(result, ProviderQuote):
                 quotes.append(result)
-            elif result is None or isinstance(result, Exception):
-                pass  # unavailable provider — silently skipped
 
         return quotes
 
