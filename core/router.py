@@ -16,13 +16,10 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
-from typing import Optional
 
 from core.providers.base import BaseProvider
 from core.settlement import OnChainSettlement
-from core.types import (
-    ComputeProvider, JobRequest, JobResult, JobStatus, ProviderQuote, RoutingDecision
-)
+from core.types import JobRequest, JobResult, JobStatus, ProviderQuote, RoutingDecision
 
 logger = logging.getLogger(__name__)
 
